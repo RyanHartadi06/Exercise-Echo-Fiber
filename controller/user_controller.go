@@ -4,7 +4,9 @@ import (
 	"Go-Echo/config"
 	"Go-Echo/model"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"strconv"
 )
 
 func GetUserController(e echo.Context) error {
@@ -24,10 +26,23 @@ func GetUserController(e echo.Context) error {
 }
 
 func RegisterController(c echo.Context) error {
-	//email := e.FormValue("email")
-	//name := e.FormValue("name")
+	ageStr := c.FormValue("age") // Assuming age is passed as a string in the form data
 
-	user := model.User{}
+	age, errState := strconv.ParseInt(ageStr, 10, 64)
+	if errState != nil {
+		panic(errState.Error())
+	}
+	bytes, errBytes := bcrypt.GenerateFromPassword([]byte(c.FormValue("password")), 14)
+	if errBytes != nil {
+		panic(errBytes.Error())
+	}
+	user := model.User{
+		Email:    c.FormValue("email"),
+		Age:      age,
+		Name:     c.FormValue("name"),
+		Address:  c.FormValue("address"),
+		Password: string(bytes),
+	}
 
 	c.Bind(&user)
 

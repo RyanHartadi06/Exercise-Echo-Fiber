@@ -8,5 +8,6 @@ import (
 func main() {
 	config.InitDB()
 	e := route.New()
+
 	e.Start(":3001")
 }
