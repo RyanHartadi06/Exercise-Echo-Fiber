@@ -16,13 +16,14 @@ func GetProductController(e echo.Context) error {
 	err := config.DB.Find(&products).Error
 
 	if err != nil {
-		return e.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"message": err.Error(),
+		return e.JSON(http.StatusInternalServerError, model.Response{
+			Message: "Error",
+			Data:    nil,
 		})
 	}
-	return e.JSON(http.StatusOK, map[string]interface{}{
-		"data":    products,
-		"message": "success",
+	return e.JSON(http.StatusOK, model.Response{
+		Message: "Success",
+		Data:    products,
 	})
 }
 

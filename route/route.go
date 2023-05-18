@@ -14,7 +14,7 @@ func New() *echo.Echo {
 	e.GET("/user", controller.GetUserController)
 	e.POST("/user", controller.RegisterController)
 
-	//e.Static("/", "public")
+	e.GET("/product", controller.GetProductController)
 	e.POST("/product", controller.StoreProductController)
 
 	eAuthBasic := e.Group("/auth")
