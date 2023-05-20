@@ -2,7 +2,9 @@ package controller
 
 import (
 	"Go-Echo/config"
+	"Go-Echo/middleware"
 	"Go-Echo/model"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
@@ -55,5 +57,63 @@ func RegisterController(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success create user",
 		"user":    user,
+	})
+}
+
+func LoginUserController(c echo.Context) error {
+	user := model.User{
+		Email:    c.FormValue("email"),
+		Password: c.FormValue("password"),
+	}
+
+	c.Bind(&user)
+
+	err := config.DB.Where("email = ?", user.Email).First(&user).Error
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": "Failed Login",
+			"error":   err.Error(),
+		})
+	}
+
+	errCheckPassword := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(c.FormValue("password")))
+	if errCheckPassword != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": "Failed Login Password Not Match",
+			"error":   errCheckPassword.Error(),
+		})
+	}
+	token, err := middleware.CreateToken(user.Id, user.Name)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": "Failed Login",
+			"error":   err.Error(),
+		})
+	}
+
+	userResponse := model.UsersResponse{
+		Id:      user.Id,
+		Age:     user.Age,
+		Email:   user.Email,
+		Name:    user.Name,
+		Address: user.Address,
+		Token:   token,
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success login",
+		"user":    userResponse,
+	})
+}
+
+func GetSession(c echo.Context) error {
+	claims := c.Get("claims").(jwt.MapClaims)
+	// Access the claims as needed
+	name := claims["name"].(string)
+	id := claims["userId"].(float64)
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"id":   id,
+		"name": name,
 	})
 }
