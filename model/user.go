@@ -10,7 +10,7 @@ type User struct {
 }
 
 type UsersResponse struct {
-	Id      int    `json: "id" form: "id"`
+	ID      int    `json: "id" form: "id"`
 	Age     int64  `json: "age" form: "age"`
 	Email   string `json: "email" form: "email"`
 	Name    string `json: "name" form: "name"`

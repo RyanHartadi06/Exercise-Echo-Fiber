@@ -93,7 +93,7 @@ func LoginUserController(c echo.Context) error {
 	}
 
 	userResponse := model.UsersResponse{
-		Id:      user.Id,
+		ID:      user.Id,
 		Age:     user.Age,
 		Email:   user.Email,
 		Name:    user.Name,
