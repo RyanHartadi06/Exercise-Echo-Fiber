@@ -29,5 +29,8 @@ func New() *echo.Echo {
 
 	eJwt.GET("/product", controller.GetProductController)
 	eJwt.POST("/product", controller.StoreProductController)
+
+	eJwt.GET("/news", controller.GetNewsController)
+	eJwt.POST("/news", controller.PostNewsController)
 	return e
 }

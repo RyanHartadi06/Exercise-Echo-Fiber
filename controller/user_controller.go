@@ -16,14 +16,15 @@ func GetUserController(e echo.Context) error {
 
 	err := config.DB.Find(&users).Error
 	if err != nil {
-		return e.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"message": err.Error(),
+		return e.JSON(http.StatusInternalServerError, model.Response{
+			Message: err.Error(),
+			Data:    nil,
 		})
 	}
 
-	return e.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success",
-		"data":    users,
+	return e.JSON(http.StatusOK, model.Response{
+		Message: "Success",
+		Data:    users,
 	})
 }
 
@@ -50,13 +51,14 @@ func RegisterController(c echo.Context) error {
 
 	err := config.DB.Save(&user).Error
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"message": err.Error(),
+		return c.JSON(http.StatusInternalServerError, model.Response{
+			Message: err.Error(),
+			Data:    nil,
 		})
 	}
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success create user",
-		"user":    user,
+	return c.JSON(http.StatusInternalServerError, model.Response{
+		Message: "Success",
+		Data:    user,
 	})
 }
 

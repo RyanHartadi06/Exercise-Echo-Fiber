@@ -10,24 +10,22 @@ import (
 	"os"
 )
 
-func GetProductController(e echo.Context) error {
-	var products []model.Product
+func GetNewsController(e echo.Context) error {
+	var news []model.News
 
-	err := config.DB.Find(&products).Error
+	err := config.DB.Find(&news).Error
 
 	if err != nil {
-		return e.JSON(http.StatusInternalServerError, model.Response{
-			Message: "Error",
-			Data:    nil,
-		})
+		panic(err)
 	}
+
 	return e.JSON(http.StatusOK, model.Response{
 		Message: "Success",
-		Data:    products,
+		Data:    news,
 	})
 }
 
-func StoreProductController(e echo.Context) error {
+func PostNewsController(e echo.Context) error {
 	file, err := e.FormFile("file")
 	if err != nil {
 		return err
@@ -55,23 +53,23 @@ func StoreProductController(e echo.Context) error {
 	if _, err = io.Copy(dst, src); err != nil {
 		return err
 	}
-	//return e.String(http.StatusOK, "File uploaded successfully.")
-	product := model.Product{
-		Name:  e.FormValue("name"),
-		Stock: e.FormValue("stock"),
-		Image: dstPath,
+
+	news := model.News{
+		Title:       e.FormValue("title"),
+		Description: e.FormValue("description"),
+		Image:       dstPath,
 	}
 
-	e.Bind(&product)
+	e.Bind(&news)
 
-	errSave := config.DB.Save(&product).Error
+	errSave := config.DB.Save(&news).Error
 	if errSave != nil {
 		return e.JSON(http.StatusInternalServerError, map[string]interface{}{
 			"message": err.Error(),
 		})
 	}
 	return e.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success create user",
-		"product": product,
+		"message": "success create news",
+		"news":    news,
 	})
 }

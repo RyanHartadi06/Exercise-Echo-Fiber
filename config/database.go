@@ -9,7 +9,7 @@ import (
 var DB *gorm.DB
 
 func InitDB() {
-	dsn := "root:@tcp(127.0.0.1:3306)/echo-go?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:@tcp(127.0.0.1:3306)/go-echo?charset=utf8mb4&parseTime=True&loc=Local"
 	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -19,5 +19,5 @@ func InitDB() {
 }
 
 func initMigrate() {
-	DB.AutoMigrate(&model.User{}, &model.Product{})
+	DB.AutoMigrate(&model.User{}, &model.Product{}, &model.News{})
 }
