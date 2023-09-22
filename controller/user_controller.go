@@ -111,11 +111,11 @@ func LoginUserController(c echo.Context) error {
 func GetSession(c echo.Context) error {
 	claims := c.Get("claims").(jwt.MapClaims)
 	// Access the claims as needed
-	name := claims["name"].(string)
-	id := claims["userId"].(float64)
+	//name := claims["name"].(string)
+	//id := claims["userId"].(float64)
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"id":   id,
-		"name": name,
+		"id": claims,
+		//"name": name,
 	})
 }

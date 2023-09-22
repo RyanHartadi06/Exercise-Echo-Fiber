@@ -27,6 +27,20 @@ func GetProductController(e echo.Context) error {
 	})
 }
 
+func DeleteProductController(e echo.Context) error {
+	err := config.DB.Delete(&model.Product{Name: e.Param("name")}).Error
+
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, model.Response{
+			Message: "Error",
+			Data:    nil,
+		})
+	}
+	return e.JSON(http.StatusOK, model.Response{
+		Message: "Success",
+	})
+
+}
 func StoreProductController(e echo.Context) error {
 	file, err := e.FormFile("file")
 	if err != nil {

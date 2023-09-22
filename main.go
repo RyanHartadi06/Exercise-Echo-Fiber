@@ -14,5 +14,5 @@ func main() {
 	//e.Use(middleware.Logger())
 	//e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
-	e.Start(":3001")
+	e.Start(":8080")
 }

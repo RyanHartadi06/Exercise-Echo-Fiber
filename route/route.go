@@ -16,9 +16,6 @@ func New() *echo.Echo {
 		filename := c.Param("imageName")
 		return c.File("uploads/" + filename)
 	})
-	//eAuthBasic := e.Group("/auth")
-	//eAuthBasic.Use(mid.BasicAuth(middleware.BasicAuthLogin))
-	//eAuthBasic.GET("/user", controller.GetUserController)
 	e.POST("/login", controller.LoginUserController)
 	e.POST("/register", controller.RegisterController)
 
@@ -29,8 +26,13 @@ func New() *echo.Echo {
 
 	eJwt.GET("/product", controller.GetProductController)
 	eJwt.POST("/product", controller.StoreProductController)
+	eJwt.DELETE("/product/:name", controller.DeleteProductController)
 
 	eJwt.GET("/news", controller.GetNewsController)
 	eJwt.POST("/news", controller.PostNewsController)
+
+	eJwt.GET("/category", controller.GetCategoryController)
+	eJwt.POST("/category", controller.PostCategoryController)
+	eJwt.DELETE("/category/:id", controller.DeleteCategoryController)
 	return e
 }
