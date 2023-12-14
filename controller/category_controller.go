@@ -2,10 +2,12 @@ package controller
 
 import (
 	"Go-Echo/config"
+	"Go-Echo/constants"
 	"Go-Echo/model"
-	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
+
+	"github.com/labstack/echo/v4"
 )
 
 func GetCategoryController(e echo.Context) error {
@@ -16,11 +18,12 @@ func GetCategoryController(e echo.Context) error {
 	if err != nil {
 		panic(err.Error())
 	}
-
-	return e.JSON(http.StatusOK, model.Response{
+	response := constants.Response{
 		Message: "Success",
 		Data:    category,
-	})
+	}
+
+	return e.JSON(http.StatusOK, response)
 }
 
 func PostCategoryController(e echo.Context) error {
@@ -35,10 +38,34 @@ func PostCategoryController(e echo.Context) error {
 			"message": errSave.Error(),
 		})
 	}
-	return e.JSON(http.StatusOK, map[string]interface{}{
-		"message":  "success create category",
-		"category": category,
-	})
+
+	response := constants.Response{
+		Message: "Success",
+		Data:    category,
+	}
+
+
+	return e.JSON(http.StatusOK, response)
+}
+
+func ShowCategoryController(e echo.Context) error {
+	id, _ := strconv.Atoi(e.Param("id"))
+	var category model.Category
+
+	if err := config.DB.First(&category, id).Error; err != nil {
+		return e.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"message": err.Error(),
+			"status":  false,
+		})
+	}
+
+	response := constants.Response{
+		Message: "Success",
+		Data:    category,
+	}
+
+
+	return e.JSON(http.StatusOK, response)
 }
 
 func DeleteCategoryController(e echo.Context) error {
@@ -50,8 +77,10 @@ func DeleteCategoryController(e echo.Context) error {
 			"status":  false,
 		})
 	}
-	return e.JSON(http.StatusInternalServerError, map[string]interface{}{
-		"message": "Berhasil Hapus",
-		"status":  true,
-	})
+	
+	response := constants.Response{
+		Message: "Success",
+	}
+
+	return e.JSON(http.StatusOK, response)
 }

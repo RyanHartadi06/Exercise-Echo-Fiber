@@ -2,13 +2,15 @@ package controller
 
 import (
 	"Go-Echo/config"
+	"Go-Echo/constants"
 	"Go-Echo/middleware"
 	"Go-Echo/model"
+	"net/http"
+	"strconv"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
-	"net/http"
-	"strconv"
 )
 
 func GetUserController(e echo.Context) error {
@@ -22,10 +24,13 @@ func GetUserController(e echo.Context) error {
 		})
 	}
 
-	return e.JSON(http.StatusOK, model.Response{
+	response := constants.Response{
 		Message: "Success",
 		Data:    users,
-	})
+	}
+
+
+	return e.JSON(http.StatusOK, response)
 }
 
 func RegisterController(c echo.Context) error {
@@ -56,10 +61,11 @@ func RegisterController(c echo.Context) error {
 			Data:    nil,
 		})
 	}
-	return c.JSON(http.StatusInternalServerError, model.Response{
+	response := constants.Response{
 		Message: "Success",
 		Data:    user,
-	})
+	}
+	return c.JSON(http.StatusOK, response)
 }
 
 func LoginUserController(c echo.Context) error {
@@ -102,20 +108,22 @@ func LoginUserController(c echo.Context) error {
 		Address: user.Address,
 		Token:   token,
 	}
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success login",
-		"user":    userResponse,
-	})
+
+	
+	response := constants.Response{
+		Message: "success login",
+		Data:    userResponse,
+	}
+
+
+	return c.JSON(http.StatusOK, response)
+
 }
 
 func GetSession(c echo.Context) error {
 	claims := c.Get("claims").(jwt.MapClaims)
-	// Access the claims as needed
-	//name := claims["name"].(string)
-	//id := claims["userId"].(float64)
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"id": claims,
-		//"name": name,
 	})
 }

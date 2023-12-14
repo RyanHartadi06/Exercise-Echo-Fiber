@@ -2,12 +2,14 @@ package controller
 
 import (
 	"Go-Echo/config"
+	"Go-Echo/constants"
 	"Go-Echo/helper"
 	"Go-Echo/model"
-	"github.com/labstack/echo/v4"
 	"io"
 	"net/http"
 	"os"
+
+	"github.com/labstack/echo/v4"
 )
 
 func GetProductController(e echo.Context) error {
@@ -21,10 +23,13 @@ func GetProductController(e echo.Context) error {
 			Data:    nil,
 		})
 	}
-	return e.JSON(http.StatusOK, model.Response{
+	response := constants.Response{
 		Message: "Success",
 		Data:    products,
-	})
+	}
+
+
+	return e.JSON(http.StatusOK, response)
 }
 
 func DeleteProductController(e echo.Context) error {
@@ -36,9 +41,12 @@ func DeleteProductController(e echo.Context) error {
 			Data:    nil,
 		})
 	}
-	return e.JSON(http.StatusOK, model.Response{
+	response := constants.Response{
 		Message: "Success",
-	})
+	}
+
+
+	return e.JSON(http.StatusOK, response)
 
 }
 func StoreProductController(e echo.Context) error {
@@ -84,8 +92,10 @@ func StoreProductController(e echo.Context) error {
 			"message": err.Error(),
 		})
 	}
-	return e.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success create user",
-		"product": product,
-	})
+	response := constants.Response{
+		Message: "Success",
+		Data:    product,
+	}
+
+	return e.JSON(http.StatusOK, response)
 }

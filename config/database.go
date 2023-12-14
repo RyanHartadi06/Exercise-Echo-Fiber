@@ -2,6 +2,7 @@ package config
 
 import (
 	"Go-Echo/model"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -19,5 +20,5 @@ func InitDB() {
 }
 
 func initMigrate() {
-	DB.AutoMigrate(&model.User{}, &model.Product{}, &model.News{}, &model.Category{})
+	DB.AutoMigrate(&model.User{}, &model.Product{}, &model.News{}, &model.Category{} , &model.Order{})
 }

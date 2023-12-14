@@ -2,12 +2,14 @@ package controller
 
 import (
 	"Go-Echo/config"
+	"Go-Echo/constants"
 	"Go-Echo/helper"
 	"Go-Echo/model"
-	"github.com/labstack/echo/v4"
 	"io"
 	"net/http"
 	"os"
+
+	"github.com/labstack/echo/v4"
 )
 
 func GetNewsController(e echo.Context) error {
@@ -19,10 +21,13 @@ func GetNewsController(e echo.Context) error {
 		panic(err)
 	}
 
-	return e.JSON(http.StatusOK, model.Response{
+	response := constants.Response{
 		Message: "Success",
 		Data:    news,
-	})
+	}
+
+
+	return e.JSON(http.StatusOK, response)
 }
 
 func PostNewsController(e echo.Context) error {
@@ -68,8 +73,12 @@ func PostNewsController(e echo.Context) error {
 			"message": err.Error(),
 		})
 	}
-	return e.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success create news",
-		"news":    news,
-	})
+	
+	response := constants.Response{
+		Message: "Success",
+		Data:    news,
+	}
+
+
+	return e.JSON(http.StatusOK, response)
 }

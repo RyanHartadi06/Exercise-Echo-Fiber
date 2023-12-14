@@ -3,9 +3,10 @@ package route
 import (
 	"Go-Echo/controller"
 	"Go-Echo/middleware"
+	"os"
+
 	"github.com/labstack/echo/v4"
 	mid "github.com/labstack/echo/v4/middleware"
-	"os"
 )
 
 func New() *echo.Echo {
@@ -32,7 +33,12 @@ func New() *echo.Echo {
 	eJwt.POST("/news", controller.PostNewsController)
 
 	eJwt.GET("/category", controller.GetCategoryController)
+	eJwt.GET("/category/:id", controller.ShowCategoryController)
 	eJwt.POST("/category", controller.PostCategoryController)
 	eJwt.DELETE("/category/:id", controller.DeleteCategoryController)
+
+	eJwt.GET("/orders", controller.GetOrderController, middleware.ValidateToken)
+	eJwt.POST("/orders", controller.CreateOrderController, middleware.ValidateToken)
+	eJwt.POST("/update-order/:id", controller.UpdateToPaidOrderController, middleware.ValidateToken)
 	return e
 }
